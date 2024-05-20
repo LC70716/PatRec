@@ -23,7 +23,7 @@ def PlotAreaOfInterest(nii_data, denominator):
         plt.show()
 
 
-def Nifti2JPG(inputPath, outputPath, denominator=2, range=10):
+def Nifti2JPG(inputPath, outputPath, denominator=2, size=10):
     """Generates JPG files given nii.gz files
 
     Parameters
@@ -34,8 +34,8 @@ def Nifti2JPG(inputPath, outputPath, denominator=2, range=10):
        specification of directory where the JPGs will be stored
     denominator : UInt
        slice from where the selection given by range starts (# slice = # slices/denominator)
-    range : UInt
-       number of slices before and after the slice pointed by denominator which are to be generated into JPG
+    size : UInt
+       number of slices (the interval is 2*size) before and after the slice pointed by denominator which are to be generated into JPG
     """
     counter = 0
     for dirpath, dirnames, filenames in os.walk(inputPath):
@@ -48,11 +48,11 @@ def Nifti2JPG(inputPath, outputPath, denominator=2, range=10):
                 nii_data = np.flip(nii_data, 0)
                 number_of_slices = np.size(nii_data, 2)
                 for slice in range(
-                    (number_of_slices // denominator) - range,
-                    (number_of_slices // denominator) + range,
+                    (number_of_slices // denominator) - size,
+                    (number_of_slices // denominator) + size,
                 ):
-                    if ((number_of_slices // denominator) - range) >= 0 and (
-                        (number_of_slices // denominator) + range
+                    if ((number_of_slices // denominator) - size) >= 0 and (
+                        (number_of_slices // denominator) + size
                     ) < number_of_slices:
                         nii_data[:, :, slice] = cv2.normalize(
                             nii_data[:, :, slice],
@@ -70,9 +70,8 @@ def Nifti2JPG(inputPath, outputPath, denominator=2, range=10):
 
 
 Nifti2JPG(
-    "C:/Users/conti/Desktop/Progetto_Pattern/DataSets/",
-    denominator=2,
-    outputPath="C:/Users/conti/Desktop/Progetto_Pattern/Test/TestA",
+    inputPath="C:/Users/conti/Desktop/Progetto_Pattern/DataSets/DS_A_PIOP2",
+    outputPath="C:/Users/conti/Desktop/Progetto_Pattern/Train/TrainA",
 )
 
 # %%
