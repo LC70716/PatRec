@@ -68,7 +68,7 @@ def Nifti2JPG(inputPath, outputPath, denominator=2, size=10, noise = False):
                     ) < number_of_slices:
                         if (noise == True):
                             std = np.nanstd(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))
-                            noise_std = std*np.sqrt(3)
+                            noise_std = std*np.sqrt(2)
                             old_snr_tot = np.nanmean(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))/std
                             nii_data[:, :, slice] = AddNoise(nii_data[:, :, slice],noise_std)
                             new_snr_tot = np.nanmean(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))/np.nanstd(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))
