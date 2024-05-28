@@ -68,7 +68,7 @@ def Nifti2JPG(inputPath, outputPath, denominator=2, size=10, noise = False):
                     ) < number_of_slices:
                         if (noise == True):
                             std = np.nanstd(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))
-                            noise_std = std*np.sqrt(2)
+                            noise_std = std*np.sqrt(2) # 'correct' would be sqrt(3)
                             old_snr_tot = np.nanmean(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))/std
                             nii_data[:, :, slice] = AddNoise(nii_data[:, :, slice],noise_std)
                             new_snr_tot = np.nanmean(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))/np.nanstd(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))
@@ -86,9 +86,9 @@ def Nifti2JPG(inputPath, outputPath, denominator=2, size=10, noise = False):
 
 
 Nifti2JPG(
-    inputPath="C:/Users/conti/Desktop/Progetto_Pattern/DataSets/DS_B_PIOP2",
-    outputPath="C:/Users/conti/Desktop/Progetto_Pattern/PIOP2/TrainBALPHA/",
-    noise=True,
+    inputPath="C:/Users/conti/Desktop/Progetto_Pattern/DataSets/DS_A_PIOP1",
+    outputPath="C:/Users/conti/Desktop/Progetto_Pattern/DataSets/DS_A_PIOP1_JPEG/",
+    noise=False,
 )
   
 # %%
