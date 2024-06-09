@@ -69,9 +69,9 @@ def Nifti2JPG(inputPath, outputPath, denominator=2, size=10, noise = False):
                         if (noise == True):
                             std = np.nanstd(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))
                             noise_std = std*np.sqrt(2) # 'correct' would be sqrt(3)
-                            old_snr_tot = np.nanmean(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))/std
+                            old_snr_tot = np.nanmean(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))**2/std**2
                             nii_data[:, :, slice] = AddNoise(nii_data[:, :, slice],noise_std)
-                            new_snr_tot = np.nanmean(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))/np.nanstd(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))
+                            new_snr_tot = np.nanmean(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))**2/np.nanstd(np.where(np.isclose(nii_data[:, :, slice],0), np.nan, nii_data[:, :, slice]))**2
                             nii_data[:,:,slice] = np.where(nii_data[:, :, slice] == np.nan, 0, nii_data[:, :, slice])
                             frac_snr_tot=np.append(frac_snr_tot,old_snr_tot/new_snr_tot)
                         min = np.min(nii_data[:,:,slice])
