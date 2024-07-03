@@ -84,11 +84,37 @@ def Evaluate(processedPath, unprocessedPath,showPlots=True):
         h1.show()
         input()
         
-                    
+def HeatMap(processedPath,PlotName):
+    reconstructedArray = np.array(
+        [f for f in os.listdir(processedPath) if f.endswith("_rec_B.png")]
+    )
+    unprocessedArray = np.array([f for f in os.listdir(processedPath) if f.endswith("_real_B.png")])
+    img1 = cv2.imread( #not very elegant
+            os.path.join(processedPath, reconstructedArray[0]), cv2.IMREAD_GRAYSCALE
+    )
+    result = np.zeros(img1.shape,dtype=img1.dtype)
+    for i in range(len(reconstructedArray)):
+        img1 = cv2.imread(
+            os.path.join(processedPath, reconstructedArray[i]), cv2.IMREAD_GRAYSCALE
+        )
+        img2 = cv2.imread(
+            os.path.join(processedPath, unprocessedArray[i]), cv2.IMREAD_GRAYSCALE
+        )
+        if img2.shape != img1.shape:
+            img2 = cv2.resize(img2, img1.shape, interpolation=cv2.INTER_AREA)
+        subtractionResult = cv2.absdiff(img2,img1)
+        result = (result*i+subtractionResult)/(i+1)
+    print(result.shape)
+    print(result.dtype)
+    cv2.imshow(PlotName,np.uint8(result))
+    cv2.imwrite(PlotName + ".jpg",result)
+    cv2.waitKey(0)
 
 
-Evaluate(
-    "C:/Users/conti/Documents/pytorch-CycleGAN-and-pix2pix/results/t1w_cyclegan_naive_correct/test_latest/images",
-    "C:/Users/conti/Desktop/Progetto_Pattern/DataSets/DS_A_PIOP1_JPEG",
-)
+#Evaluate(
+#    "C:/Users/conti/Documents/pytorch-CycleGAN-and-pix2pix/results/t1w_cyclegan_naive_correct/test_latest/images",
+#    "C:/Users/conti/Desktop/Progetto_Pattern/DataSets/DS_A_PIOP1_JPEG",
+#)
+HeatMap("C:/Users/conti/Documents/pytorch-CycleGAN-and-pix2pix/results/test_BIG_100/t1w_cyclegan_naive_correct/test_latest/images",
+        "ALL_100")
 # %%
